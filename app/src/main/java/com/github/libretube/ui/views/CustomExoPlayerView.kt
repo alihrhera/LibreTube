@@ -61,6 +61,7 @@ import com.github.libretube.ui.activities.MainActivity
 import com.github.libretube.ui.base.BaseActivity
 import com.github.libretube.ui.extensions.toggleSystemBars
 import com.github.libretube.ui.fragments.PlayerFragment
+import com.github.libretube.ui.interfaces.BottomSheetListener
 import com.github.libretube.ui.interfaces.PlayerGestureOptions
 import com.github.libretube.ui.interfaces.PlayerOptions
 import com.github.libretube.ui.listeners.PlayerGestureController
@@ -77,7 +78,8 @@ import com.github.libretube.util.PlayingQueue
 abstract class CustomExoPlayerView(
     context: Context,
     attributeSet: AttributeSet? = null
-) : PlayerView(context, attributeSet), PlayerOptions, PlayerGestureOptions {
+) : PlayerView(context, attributeSet), PlayerOptions, PlayerGestureOptions,
+    BottomSheetListener {
     @Suppress("LeakingThis")
     val binding = ExoStyledPlayerControlViewBinding.bind(this)
     val backgroundBinding = CustomExoPlayerViewTemplateBinding.bind(this)
@@ -135,6 +137,9 @@ abstract class CustomExoPlayerView(
         if (isControllerFullyVisible) hideController() else showController()
     }
 
+    override fun onBottomSheetDismissed() {
+        chaptersBottomSheet?.dismiss()
+    }
     fun initialize(chaptersViewModel: ChaptersViewModel) {
         this.chaptersViewModel = chaptersViewModel
         this.playerGestureController = PlayerGestureController(context as BaseActivity, this)
