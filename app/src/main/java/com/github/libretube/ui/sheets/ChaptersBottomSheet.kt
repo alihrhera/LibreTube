@@ -3,7 +3,6 @@ package com.github.libretube.ui.sheets
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
@@ -33,7 +32,6 @@ class ChaptersBottomSheet : ExpandablePlayerSheet(R.layout.bottom_sheet) {
         super.onCreate(savedInstanceState)
         duration = requireArguments().getLong(IntentData.duration, 0L)
     }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setOnShowListener { dialogInterface ->
@@ -62,21 +60,15 @@ class ChaptersBottomSheet : ExpandablePlayerSheet(R.layout.bottom_sheet) {
         }
         return dialog
     }
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.e("ChaptersBottomSheet", "onViewCreated: test")
-
         _binding = BottomSheetBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
 
         binding.optionsRecycler.layoutManager = LinearLayoutManager(context)
         val adapter =
             ChaptersAdapter(chaptersViewModel.chapters, duration) {
-                setFragmentResult(
-                    SEEK_TO_POSITION_REQUEST_KEY,
-                    bundleOf(IntentData.currentPosition to it)
-                )
+                setFragmentResult(SEEK_TO_POSITION_REQUEST_KEY, bundleOf(IntentData.currentPosition to it))
             }
         binding.optionsRecycler.adapter = adapter
 
@@ -98,9 +90,7 @@ class ChaptersBottomSheet : ExpandablePlayerSheet(R.layout.bottom_sheet) {
                         binding.optionsRecycler.scrollToPosition(it)
                     }
 
-                    binding.optionsRecycler.viewTreeObserver.removeOnGlobalLayoutListener(
-                        this
-                    )
+                    binding.optionsRecycler.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 }
             }
         )
@@ -140,8 +130,6 @@ class ChaptersBottomSheet : ExpandablePlayerSheet(R.layout.bottom_sheet) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        dismiss()
-        dialog?.dismiss()
         _binding = null
     }
 
